@@ -33,5 +33,12 @@
 
             <Button x:Name="inditasGomb" Content="Játék indítása" Width="120" Height="30" Click="inditasGomb_Click"/>
         </StackPanel>
+
+        <Grid x:Name="jatekTer" Grid.Row="1" Margin="0, 10, 0, 10"/>
+        <StackPanel Grid.Row="2">
+            <TextBlock x:Name="allapotText" Text="Válassz méretet és pályát" FontSize="16" Margin="0.5"/>
+            <TextBlock x:Name="probalkozasText" Text="Próbálkozások: 0" FontSize="16"/>
+        </StackPanel>
+        
     </Grid>
 </Window>
