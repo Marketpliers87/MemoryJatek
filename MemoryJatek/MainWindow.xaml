@@ -5,8 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MemoryJatek"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MemóriaJáték" Height="456000" Width="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <StackPanel Margin="0, 0, 20, 10">
+                <TextBlock Text="Játék mérete"/>
+                <ListBox x:Name="meretLista" Width="100" SelectionChanged="meretLista_SelectionChanged">
+                    <ListBoxItem Content="2 x 2" />
+                    <ListBoxItem Content="4 x 4" />
+                    <ListBoxItem Content="6 x 6" />
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Margin="0, 0, 20, 10">
+                <TextBlock Text="Pálya: " />
+                <ListBox x:Name="temaLista" Width="150">
+                    <ListBoxItem Content="Számok" />
+                    <ListBoxItem Content="Smile-k" />
+                    <ListBoxItem Content="Országok és fővárosok" />
+                </ListBox>
+            </StackPanel>
+
+            <Button x:Name="inditasGomb" Content="Játék indítása" Width="120" Height="30" Click="inditasGomb_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
