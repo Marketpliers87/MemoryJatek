@@ -28,7 +28,7 @@ namespace MemoryJatek
 
         bool kattinthato = true;
 
-        List<string> ertelel = new List<string>();
+        List<string> ertekek = new List<string>();
         DispatcherTimer timer = new DispatcherTimer();
 
         public MainWindow()
@@ -37,6 +37,9 @@ namespace MemoryJatek
 
             meretLista.SelectedIndex = 1;
             temaLista.SelectedIndex = 0;
+
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
         }
 
         private void meretLista_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -89,6 +92,144 @@ namespace MemoryJatek
                 sorok.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
+            ertekek = AdatokLetrehozasa();
+            ertekek = ertekek.OrderBy(x => random.Next()).ToList();
+            int index = 0;
+
+            for (int i = 0; i < meret; i++)
+            {
+                for (int j = 0; j < meret; j++)
+                {
+                    Button gomb = new Button();
+                    gomb.Content = "?";
+                    gomb.FontSize = 24;
+                    gomb.Tag = ertekek[index];
+                    gomb.Margin = new Thickness(3);
+
+                    gomb.Click += Gomb_Click;
+
+                    Grid.SetRow(gomb, i);
+                    Grid.SetColumn(gomb, j);
+
+                    sorok.Children.Add(gomb);
+                    index++;
+                }
+            }
+            jatekTer.Children.Add(sorok);
+        }
+
+        private List<string> AdatokLetrehozasa()
+        {
+            List<string> lista = new List<string>();
+
+            if (temaLista.SelectedIndex == 0)
+            {
+                for (int i = 1; i <= (meret * meret) / 2; i++)
+                {
+                    lista.Add(i.ToString());
+                    lista.Add(i.ToString());
+                }
+            }
+            else if (temaLista.SelectedIndex == 1)
+            {
+                string[] smiley =
+                {
+                    ":)", ":(", ":D", ";)", ":P", "XD",
+                    "B)", ":O", ":|", ":'(", ":/", ":3",
+                    "^_^", "^^", "-_-", "UwU", "o_O", ">:("
+                };
+
+                int parokSzama = (meret * meret) / 2;
+                for (int i = 0; i < parokSzama; i++)
+                {
+                    lista.Add(smiley[i]);
+                    lista.Add(smiley[i]);
+                }
+            }
+
+            else if (temaLista.SelectedIndex == 2)
+            {
+                string[] orszagok =
+                {
+                    "Magyarország", "Budapest", "Franciaország", "Párizs", "Németország", "Berlin", "Olaszország", "Róma", "Spanyolország", "Madrid", "Ausztria", "Bécs", "Japán", "Tokió", "Kanada", "Ottawa", "Ausztrália", "Canberra"
+                };
+                int parokSzama = (meret * meret) / 2;
+
+                for (int i = 0; i < parokSzama; i++)
+                {
+                    lista.Add(orszagok[i]);
+                    lista.Add(orszagok[i]);
+                }
+            }
+            return lista;
+        }
+
+        private void Gomb_Click(object sender, RoutedEventArgs e)
+        {
+            if (!kattinthato)
+            {
+                return;
+            }
+
+            Button gomb = (Button)sender;
+
+            if (gomb == elsoGomb)
+            {
+                return;
+            }
+
+            gomb.Content = gomb.Tag;
+
+            if (elsoGomb == null)
+            {
+                elsoGomb = gomb;
+            }
+            else
+            {
+                masodikGomb = gomb;
+
+                probalkozasok++;
+                probalkozasText.Text = "Próbálkozások: " + probalkozasok;
+
+                kattinthato = false;
+
+                if (elsoGomb.Tag.ToString() == masodikGomb.Tag.ToString())
+                {
+                    elsoGomb.IsEnabled = false;
+                    masodikGomb.IsEnabled = false;
+
+                    megtalaltParok++;
+
+                    elsoGomb = null;
+                    masodikGomb = null;
+
+                    kattinthato = true;
+
+                    if (megtalaltParok == (meret * meret) / 2)
+                    {
+                        allapotText.Text =
+                            "Gratulálok! " + probalkozasok +
+                            " próbálkozásból megtaláltad az összes párt!";
+                    }
+                }
+                else
+                {
+                    timer.Start();
+                }
+            }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            timer.Stop();
+
+            elsoGomb.Content = "?";
+            masodikGomb.Content = "?";
+
+            elsoGomb = null;
+            masodikGomb = null;
+
+            kattinthato = true;
         }
     }
 }
